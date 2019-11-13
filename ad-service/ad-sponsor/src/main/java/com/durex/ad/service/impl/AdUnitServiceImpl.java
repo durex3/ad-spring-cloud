@@ -3,14 +3,17 @@ package com.durex.ad.service.impl;
 import com.durex.ad.constant.Constants;
 import com.durex.ad.dao.AdPlanRepository;
 import com.durex.ad.dao.AdUnitRepository;
+import com.durex.ad.dao.CreativeRepository;
 import com.durex.ad.dao.unit_condition.AdUnitDistrictRepository;
 import com.durex.ad.dao.unit_condition.AdUnitItRepository;
 import com.durex.ad.dao.unit_condition.AdUnitKeywordRepository;
+import com.durex.ad.dao.unit_condition.CreativeUnitRepository;
 import com.durex.ad.entity.AdPlan;
 import com.durex.ad.entity.AdUnit;
 import com.durex.ad.entity.unit_condition.AdUnitDistrict;
 import com.durex.ad.entity.unit_condition.AdUnitIt;
 import com.durex.ad.entity.unit_condition.AdUnitKeyword;
+import com.durex.ad.entity.unit_condition.CreativeUnit;
 import com.durex.ad.exception.AdException;
 import com.durex.ad.service.IAdUnitService;
 import com.durex.ad.vo.*;
@@ -38,6 +41,10 @@ public class AdUnitServiceImpl implements IAdUnitService {
     private AdUnitItRepository adUnitItRepository;
     @Resource
     private AdUnitDistrictRepository adUnitDistrictRepository;
+    @Resource
+    private CreativeRepository creativeRepository;
+    @Resource
+    private CreativeUnitRepository creativeUnitRepository;
 
     @Override
     public AdUnitResponse createUnit(AdUnitRequest adUnitRequest) throws AdException {
@@ -119,5 +126,36 @@ public class AdUnitServiceImpl implements IAdUnitService {
             return true;
         }
         return adUnitRepository.findAllById(unitIds).size() != new HashSet<>(unitIds).size();
+    }
+
+    /**
+     * 判断推广创意列表是否存在
+     * @param creativeIds 推广创意列表
+     * @return boolean
+     */
+    private boolean isRelateCreativeNotExist(List<Long> creativeIds) {
+        if (CollectionUtils.isEmpty(creativeIds)) {
+            return true;
+        }
+        return creativeRepository.findAllById(creativeIds).size() != new HashSet<>(creativeIds).size();
+    }
+
+    @Override
+    public CreativeUnitResponse createCreativeUnit(CreativeUnitRequest creativeUnitRequest) throws AdException {
+        if (CollectionUtils.isEmpty(creativeUnitRequest.getUnitItems())) {
+            throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
+        }
+        List<Long> units = creativeUnitRequest.getUnitItems().stream().
+                map(CreativeUnitRequest.CreativeUnitItem::getUnitId).collect(Collectors.toList());
+        List<Long> creativeIds = creativeUnitRequest.getUnitItems().stream().
+                map(CreativeUnitRequest.CreativeUnitItem::getCreativeId).collect(Collectors.toList());
+        if (isRelateUnitNotExist(units) || isRelateCreativeNotExist(creativeIds)) {
+            throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
+        }
+        List<CreativeUnit> creativeUnits = Lists.newArrayList();
+        creativeUnitRequest.getUnitItems().forEach(creativeUnitItem
+                -> creativeUnits.add(new CreativeUnit(creativeUnitItem.getCreativeId(), creativeUnitItem.getUnitId())));
+        List<Long> ids = creativeUnitRepository.saveAll(creativeUnits).stream().map(CreativeUnit::getId).collect(Collectors.toList());
+        return new CreativeUnitResponse(ids);
     }
 }

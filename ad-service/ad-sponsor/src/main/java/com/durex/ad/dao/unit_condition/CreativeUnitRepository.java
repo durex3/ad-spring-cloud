@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @date 2019/11/6 0:30
  */
 public interface CreativeUnitRepository extends JpaRepository<CreativeUnit, Long> {
+
+
 }

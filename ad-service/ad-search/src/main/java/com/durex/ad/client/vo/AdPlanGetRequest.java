@@ -1,24 +1,19 @@
-package com.durex.ad.vo;
+package com.durex.ad.client.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.collections4.CollectionUtils;
 import java.util.List;
 
 /**
  * @author gelong
- * @date 2019/11/8 22:35
+ * @date 2019/11/17 13:43
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class AdPlanGetRequest {
 
     private Long userId;
     private List<Long> ids;
-
-    public boolean validate() {
-        return  userId != null && CollectionUtils.isNotEmpty(ids);
-    }
 }

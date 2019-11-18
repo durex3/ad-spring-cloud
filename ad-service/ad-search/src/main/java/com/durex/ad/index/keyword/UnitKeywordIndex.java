@@ -72,6 +72,12 @@ public class UnitKeywordIndex implements IndexAware<String, Set<Long>> {
         log.info("AdUnitIndex delete add: {}", keywordUnitMap);
     }
 
+    /**
+     * 根据推广单元取匹配关键词
+     * @param unitId 推广单元
+     * @param keywords 关键词
+     * @return boolean
+     */
     public boolean match(Long unitId, List<String> keywords) {
         if (CollectionUtils.isEmpty(keywords) || !unitKeywordMap.containsKey(unitId)) {
             return false;

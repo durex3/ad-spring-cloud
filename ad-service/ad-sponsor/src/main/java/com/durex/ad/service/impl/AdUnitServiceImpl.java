@@ -145,11 +145,11 @@ public class AdUnitServiceImpl implements IAdUnitService {
         if (CollectionUtils.isEmpty(creativeUnitRequest.getUnitItems())) {
             throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
         }
-        List<Long> units = creativeUnitRequest.getUnitItems().stream().
+        List<Long> unitIds = creativeUnitRequest.getUnitItems().stream().
                 map(CreativeUnitRequest.CreativeUnitItem::getUnitId).collect(Collectors.toList());
         List<Long> creativeIds = creativeUnitRequest.getUnitItems().stream().
                 map(CreativeUnitRequest.CreativeUnitItem::getCreativeId).collect(Collectors.toList());
-        if (isRelateUnitNotExist(units) || isRelateCreativeNotExist(creativeIds)) {
+        if (isRelateUnitNotExist(unitIds) || isRelateCreativeNotExist(creativeIds)) {
             throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
         }
         List<CreativeUnit> creativeUnits = Lists.newArrayList();

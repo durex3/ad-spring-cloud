@@ -15,7 +15,7 @@
         <module>ad-common</module>
         <module>ad-sponsor</module>
         <module>ad-search</module>
-        <module>ad-sdk</module>
+        <module>ad-dump</module>
     </modules>
     <packaging>pom</packaging>
 

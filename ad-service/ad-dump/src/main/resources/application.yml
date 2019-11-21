@@ -1,11 +1,6 @@
-server:
-  port: 7000
-  servlet:
-    context-path: /ad-sponsor
-
 spring:
   application:
-    name: eureka-client-ad-sponsor
+    name: eureka-client-ad-dump
   jpa:
     show-sql: true
     hibernate:
@@ -22,8 +17,3 @@ spring:
       max-active: 4
       min-idle: 2
       initial-size: 2
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8000/eureka/

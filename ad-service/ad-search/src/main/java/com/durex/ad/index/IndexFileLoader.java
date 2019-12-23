@@ -4,10 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.durex.ad.dump.DumpConstant;
 import com.durex.ad.dump.table.*;
 import com.durex.ad.handler.AdLevelDataHandler;
-import com.durex.ad.mysql.OpType;
+import com.durex.ad.mysql.constant.OpType;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.IOException;

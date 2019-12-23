@@ -1,4 +1,4 @@
-package com.durex.ad.mysql;
+package com.durex.ad.mysql.constant;
 
 /**
  * @author gelong

@@ -15,9 +15,8 @@ import com.durex.ad.index.creativeunit.CreativeUnitObject;
 import com.durex.ad.index.district.UnitDistrictIndex;
 import com.durex.ad.index.interest.UnitItIndex;
 import com.durex.ad.index.keyword.UnitKeywordIndex;
-import com.durex.ad.mysql.OpType;
+import com.durex.ad.mysql.constant.OpType;
 import com.durex.ad.utils.CommonUtils;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 

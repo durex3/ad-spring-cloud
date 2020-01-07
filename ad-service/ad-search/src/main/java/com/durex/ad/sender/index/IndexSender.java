@@ -1,4 +1,4 @@
-package com.durex.ad.sender;
+package com.durex.ad.sender.index;
 
 import com.alibaba.fastjson.JSON;
 import com.durex.ad.dump.table.*;
@@ -6,6 +6,7 @@ import com.durex.ad.handler.AdLevelDataHandler;
 import com.durex.ad.index.DataLevel;
 import com.durex.ad.mysql.constant.Constant;
 import com.durex.ad.mysql.dto.MySqlRowData;
+import com.durex.ad.sender.ISender;
 import com.durex.ad.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

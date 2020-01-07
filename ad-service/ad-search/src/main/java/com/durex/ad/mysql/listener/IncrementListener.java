@@ -26,7 +26,7 @@ public class IncrementListener implements Ilistener {
 
     @Resource
     private AggregationListener aggregationListener;
-    @Resource
+    @Resource(name = "indexSender")
     private ISender sender;
 
     @PostConstruct

@@ -2,7 +2,9 @@ package com.durex.ad.sender;
 
 import com.alibaba.fastjson.JSON;
 import com.durex.ad.dump.table.AdCreativeTable;
+import com.durex.ad.dump.table.AdCreativeUnitTable;
 import com.durex.ad.dump.table.AdPlanTable;
+import com.durex.ad.dump.table.AdUnitTable;
 import com.durex.ad.handler.AdLevelDataHandler;
 import com.durex.ad.index.DataLevel;
 import com.durex.ad.mysql.constant.Constant;
@@ -10,6 +12,7 @@ import com.durex.ad.mysql.dto.MySqlRowData;
 import com.durex.ad.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +31,7 @@ public class IndexSender implements ISender {
         if (DataLevel.LEVEL2.toString().equals(level)) {
             level2RowData(rowData);
         } else if (DataLevel.LEVEL3.toString().equals(level)) {
-
+            level3RowData(rowData);
         } else if (DataLevel.LEVEL4.toString().equals(level)) {
 
         } else {
@@ -81,12 +84,9 @@ public class IndexSender implements ISender {
         } else if (rowData.getTableName().equals(
                 Constant.AdCreativeTableInfo.TABLE_NAME)) {
             List<AdCreativeTable> creativeTables = new ArrayList<>();
-
             for (Map<String, String> fieldValeMap :
                     rowData.getFieldValueMap()) {
-
                 AdCreativeTable creativeTable = new AdCreativeTable();
-
                 fieldValeMap.forEach((k, v) -> {
                     switch (k) {
                         case Constant.AdCreativeTableInfo.COLUMN_ID:
@@ -118,6 +118,65 @@ public class IndexSender implements ISender {
             }
             creativeTables.forEach(c ->
                     AdLevelDataHandler.handleLevel2(c, rowData.getOpType()));
+        }
+    }
+
+    /**
+     * 第三层级数据投递
+     * @param rowData 数据
+     */
+    private void level3RowData(MySqlRowData rowData) {
+        if (rowData.getTableName().equals(
+                Constant.AdUnitTableInfo.TABLE_NAME)) {
+            List<AdUnitTable> unitTables = new ArrayList<>();
+            for (Map<String, String> fieldValueMap :
+                    rowData.getFieldValueMap()) {
+                AdUnitTable unitTable = new AdUnitTable();
+                fieldValueMap.forEach((k, v) -> {
+                    switch (k) {
+                        case Constant.AdUnitTableInfo.COLUMN_ID:
+                            unitTable.setId(Long.valueOf(v));
+                            break;
+                        case Constant.AdUnitTableInfo.COLUMN_UNIT_STATUS:
+                            unitTable.setUnitStatus(Integer.valueOf(v));
+                            break;
+                        case Constant.AdUnitTableInfo.COLUMN_POSITION_TYPE:
+                            unitTable.setPositionType(Integer.valueOf(v));
+                            break;
+                        case Constant.AdUnitTableInfo.COLUMN_PLAN_ID:
+                            unitTable.setPlanId(Long.valueOf(v));
+                            break;
+                        default:
+                            break;
+                    }
+                });
+                unitTables.add(unitTable);
+            }
+            unitTables.forEach(u ->
+                    AdLevelDataHandler.handleLevel3(u, rowData.getOpType()));
+        } else if (rowData.getTableName().equals(
+                Constant.AdCreativeUnitTableInfo.TABLE_NAME)) {
+            List<AdCreativeUnitTable> creativeUnitTables = new ArrayList<>();
+            for (Map<String, String> fieldValueMap :
+                    rowData.getFieldValueMap()) {
+                AdCreativeUnitTable creativeUnitTable = new AdCreativeUnitTable();
+                fieldValueMap.forEach((k, v) -> {
+                    switch (k) {
+                        case Constant.AdCreativeUnitTableInfo.COLUMN_CREATIVE_ID:
+                            creativeUnitTable.setCreativeId(Long.valueOf(v));
+                            break;
+                        case Constant.AdCreativeUnitTableInfo.COLUMN_UNIT_ID:
+                            creativeUnitTable.setUnitId(Long.valueOf(v));
+                            break;
+                        default:
+                            break;
+                    }
+                });
+                creativeUnitTables.add(creativeUnitTable);
+            }
+            creativeUnitTables.forEach(
+                    u -> AdLevelDataHandler.handleLevel3(u, rowData.getOpType())
+            );
         }
     }
 }

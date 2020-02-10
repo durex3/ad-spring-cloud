@@ -1,13 +1,14 @@
 package com.durex.ad.index.creativeunit;
 
 import com.durex.ad.index.IndexAware;
+import com.durex.ad.index.adunit.AdUnitObject;
 import com.durex.ad.utils.MapUtils;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
-import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
@@ -73,5 +74,25 @@ public class CreativeUnitIndex implements IndexAware<String, CreativeUnitObject>
             creativeIdSet.remove(value.getUnitId());
         }
         log.info("CreativeUnitIndex before delete: {}", objectMap);
+    }
+
+
+    public List<Long> selectAds(List<AdUnitObject> unitObjects) {
+
+        if (CollectionUtils.isEmpty(unitObjects)) {
+            return Collections.emptyList();
+        }
+
+        List<Long> result = new ArrayList<>();
+
+        for (AdUnitObject unitObject : unitObjects) {
+
+            Set<Long> adIds = unitCreativeMap.get(unitObject.getUnitId());
+            if (CollectionUtils.isNotEmpty(adIds)) {
+                result.addAll(adIds);
+            }
+        }
+
+        return result;
     }
 }

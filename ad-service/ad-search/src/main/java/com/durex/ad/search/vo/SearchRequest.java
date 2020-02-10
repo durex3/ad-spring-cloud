@@ -11,7 +11,6 @@ import com.durex.ad.search.vo.media.Geo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 /**

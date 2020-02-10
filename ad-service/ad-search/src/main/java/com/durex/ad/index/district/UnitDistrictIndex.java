@@ -1,6 +1,8 @@
 package com.durex.ad.index.district;
 
 import com.durex.ad.index.IndexAware;
+import com.durex.ad.search.vo.feature.DistrictFeature;
+import com.durex.ad.utils.CommonUtils;
 import com.durex.ad.utils.MapUtils;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.stream.Collectors;
 
 /**
  * @author gelong
@@ -76,12 +79,18 @@ public class UnitDistrictIndex implements IndexAware<String, Set<Long>> {
      * @param districts 地域
      * @return boolean
      */
-    public boolean match(Long unitId, List<String> districts) {
+    public boolean match(Long unitId, List<DistrictFeature.ProvinceAndCity> districts) {
         if (CollectionUtils.isEmpty(districts) || !unitDistrictMap.containsKey(unitId)) {
             return false;
         }
         Set<String> districtSet = unitDistrictMap.get(unitId);
+        List<String> targetDistricts = districts.stream()
+                .map(
+                        d -> CommonUtils.stringConcat(
+                                d.getProvince(), d.getCity()
+                        )
+                ).collect(Collectors.toList());
         // districts是districtSet的子集
-        return CollectionUtils.isSubCollection(districts, districtSet);
+        return CollectionUtils.isSubCollection(targetDistricts, districtSet);
     }
 }
